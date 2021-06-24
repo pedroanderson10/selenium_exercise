@@ -9,6 +9,11 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import javax.validation.constraints.AssertTrue;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 public class LoginTest {
 
     private static final String URL_LOGIN = "http://localhost:8080/login";
@@ -43,10 +48,19 @@ public class LoginTest {
         browser.findElement(By.id("password")).sendKeys("passwordX");
         browser.findElement(By.id("login-form")).submit();
 
-        Assert.assertTrue(browser.getCurrentUrl().equals("http://localhost:8080/login?error"));
+        assertTrue(browser.getCurrentUrl().equals("http://localhost:8080/login?error"));
         //O método getPageSource devolve uma string com todo o código fonte da página
-        Assert.assertTrue(browser.getPageSource().contains("Usuário e senha inválidos.") );
+        assertTrue(browser.getPageSource().contains("Usuário e senha inválidos.") );
         Assert.assertThrows(NoSuchElementException.class, ()-> browser.findElement(By.id("usuario-logado")) );
+    }
+
+    @Test
+    @DisplayName("Tentativa de Acesso à páginas restritas")
+    public void tentativaDeAcessoAPaginaRestritaSerRealizarLogin(){
+        this.browser.navigate().to("http://localhost:8080/leiloes/2");
+
+        assertTrue(browser.getCurrentUrl().equals("http://localhost:8080/login"));
+        assertFalse(browser.getPageSource().contains("Dados do Leilão"));
     }
 
 }
