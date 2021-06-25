@@ -1,5 +1,6 @@
 package leilao.login;
 
+import leilao.leiloes.LeiloesPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -28,8 +29,9 @@ public class LoginPage {
         browser.findElement(By.id("password")).sendKeys(password);
     }
 
-    public void realizarLogin() {
+    public LeiloesPage realizarLogin() {
         browser.findElement(By.id("login-form")).submit();
+        return new LeiloesPage(browser); //Retornar o browser que está sendo utilizado no momento
     }
 
     public boolean isPaginaLogin() {
