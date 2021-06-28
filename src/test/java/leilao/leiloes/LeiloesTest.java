@@ -15,6 +15,19 @@ import static org.junit.Assert.*;
 public class LeiloesTest {
 
     private LeiloesPage leiloesPage;
+    private CadastroLeilaoPage paginaCadastro;
+
+    @BeforeEach
+    //Realizar login e carregar formulário da página "Criar Leilão"
+    public void realizarLogin(){
+        // 1 step : Realizar login
+        LoginPage loginPage = new LoginPage();
+        loginPage.preencherFormularioLogin("fulano", "pass");
+        this.leiloesPage = loginPage.realizarLogin();
+
+        // 2 step : Entrar na página "Criar Leilão"
+        this.paginaCadastro = leiloesPage.carregarFormulario();
+    }
 
     @AfterEach
     public void fecharBrowser(){
@@ -25,12 +38,7 @@ public class LeiloesTest {
     @DisplayName("Cadastro Leilão")
     public void efetuarCadastroDeLeilao(){
         // 1 step : Realizar login
-        LoginPage loginPage = new LoginPage();
-        loginPage.preencherFormularioLogin("fulano", "pass");
-        this.leiloesPage = loginPage.realizarLogin();
-
         // 2 step : Entrar na página "Criar Leilão"
-        CadastroLeilaoPage paginaCadastro = leiloesPage.carregarFormulario();
 
         // 3 step : Preencher formulário
         String diaAtual = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
@@ -40,5 +48,14 @@ public class LeiloesTest {
 
         assertTrue(leiloesPage.isLeilaoCadastrado(nome, valor, diaAtual));
     }
+
+    @Test
+    @DisplayName("Validar Cadastro de Leilao")
+    public void validarCadastroDeUmNovoLeilao(){
+        this.leiloesPage = paginaCadastro.cadastrarLeilao("", "", "");
+        assertFalse(this.paginaCadastro.isPaginaCadastroLeilao());
+        assertTrue(this.paginaCadastro.isMensagensValidacao());
+    }
+
 
 }
