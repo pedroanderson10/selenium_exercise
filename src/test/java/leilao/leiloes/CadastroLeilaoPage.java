@@ -1,23 +1,18 @@
 package leilao.leiloes;
 
+import leilao.PageObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-public class CadastroLeilaoPage {
+public class CadastroLeilaoPage extends PageObject {
 
     private static final String URL_PAGINA_CADASTRO = "http://localhost:8080/leiloes/new";
-    private WebDriver browser;
 
     public CadastroLeilaoPage(WebDriver browser) {
         //Informar para o Selenium, onde está o caminho do executável do driver do navegador
         //System.setProperty("webdriver.chrome.driver", "drivers/chromedriver.exe");
-        this.browser = browser;
+        super(browser);
     }
-
-    public void fecharBrowser() {
-        this.browser.quit();
-    }
-
 
     public LeiloesPage cadastrarLeilao(String nome, String valorInicial, String dataAbertura) {
         this.browser.findElement(By.id("nome")).sendKeys(nome);
